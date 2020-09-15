@@ -24,7 +24,7 @@ namespace MCore.Server.Services {
         /// Constructs a command service
         /// </summary>
         public CommandService() {
-            //Rpc.Client.Event("ExecuteCommand").On(OnChatMessage);
+            Rpc.Client.Event(ServerEvents.chatMessage);
         }
 
         /// <summary>

@@ -7,8 +7,8 @@
     <ProjectGuid>{453AE1AF-845F-449B-99A2-53C99FDE8A65}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>M.Client</RootNamespace>
-    <AssemblyName>M.Client</AssemblyName>
+    <RootNamespace>MCore.Client</RootNamespace>
+    <AssemblyName>MCore.Client.net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -52,6 +52,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mcore.Base\MCore.Base.csproj">
+      <Project>{DB2541C2-2B2C-45DC-B4AB-E0B9526FF4FE}</Project>
+      <Name>MCore.Base</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

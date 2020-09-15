@@ -6,6 +6,7 @@ using MCore.Server.Entity;
 using MCore.Server.Command;
 using MCore.Server.Storage;
 using MCore.Server.Services;
+using MCore.Base.Services;
 /// <summary>
 /// Base namespace
 /// </summary>
@@ -44,6 +45,8 @@ namespace MCore.Server
         /// </summary>
         public readonly ServiceRegistry Services = new ServiceRegistry();
 
+        public int TickCounter = 0;
+
         /// <summary>
         /// Script load
         /// </summary>
@@ -70,7 +73,7 @@ namespace MCore.Server
         /// </summary>
         private void OnLoad()
         {
-
+           
         }
 
         /// <summary>
@@ -84,8 +87,23 @@ namespace MCore.Server
                 this.firstTick = true;
             }
 
+            //if (this.TickCounter % 10 == 0) UpdatePlayersHandle();
+            //TickCounter++;
+
             // Guarantee async
             await Delay(100);
+        }
+
+        private void UpdatePlayersHandle()
+        {
+            foreach (Player player in OnlinePlayers)
+            {
+                MPlayer mPlayer = this.GetPlayer(player);
+                if (int.TryParse(player.Handle, out int networkId))
+                {
+                    mPlayer.NetworkId = networkId;
+                }
+            }
         }
 
 

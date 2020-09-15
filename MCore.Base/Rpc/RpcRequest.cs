@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CitizenFX.Core;
+using System;
 using System.Threading.Tasks;
 
 namespace MCore.Base.Rpc {
@@ -22,6 +23,7 @@ namespace MCore.Base.Rpc {
         /// <param name="serializer">Serializer for request</param>
 		public RpcRequest(string @event, IRpcHandler handler, IRpcTrigger trigger, IRpcSerializer serializer) {
 			this.message.Event = @event;
+
 			this.handler = handler;
 			this.trigger = trigger;
 			this.serializer = serializer;

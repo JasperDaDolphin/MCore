@@ -6,6 +6,7 @@
     public static class RpcEvents {
 
 		public const string GetServerInformation = "Mcore:client:ready";
+		public const string ClientConnect = "MCore:client:connect";
 		public const string ClientDisconnect = "Mcore:client:disconnect";
 
 		public const string GetUser = "Mcore:user:load";

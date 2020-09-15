@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using MCore.Base.Rpc;
 using MCore.Server.Entity;
 using MCore.Server.Rpc;
 using System;
@@ -19,7 +20,7 @@ namespace MCore.Server.Services {
         /// Constructs a connect service
         /// </summary>
         public ConnectService() {
-            Rpc.Client.Event("playerSpawned").On(HandlePlayerConnecting);
+            Rpc.Client.Event(RpcEvents.ClientConnect).On(HandlePlayerConnecting);
         }
 
         /// <summary>
@@ -29,25 +30,15 @@ namespace MCore.Server.Services {
             // Empty
         }
 
-        // Function that gets called when player has connected
-        //private void HandlePlayerConnecting([FromSource]Player player, string playerName, dynamic setKickReason, dynamic deferrals) {
-        //    try {
-        //        MPlayer MPlayer = MCoreServer.Instance.GetPlayer(player);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Debug.WriteLine(e.ToString());
-        //    }
-        //}
-
+        //Function that gets called when player has connected
         private void HandlePlayerConnecting([FromSource]Player player)
         {
             try
             {
-                MPlayer MPlayer = MCoreServer.Instance.GetPlayer(player);
-                if(int.TryParse(player.Handle, out int id))
+                MPlayer mPlayer = MCoreServer.Instance.GetPlayer(player);
+                if (int.TryParse(player.Handle, out int networkId))
                 {
-                    MPlayer.NetworkId = id;
+                    mPlayer.NetworkId = networkId;
                 }
             }
             catch (Exception e)
@@ -55,6 +46,8 @@ namespace MCore.Server.Services {
                 Debug.WriteLine(e.ToString());
             }
         }
+
+
 
     }
 }

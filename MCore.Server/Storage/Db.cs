@@ -19,7 +19,7 @@ namespace MCore.Server.Storage {
         /// <summary>
         /// MySQL connection url
         /// </summary>
-        public static readonly string CONNECTION_URL = "data source=127.0.0.01;database=Mcore;user id=root;password=password;SslMode=none";
+        public static readonly string CONNECTION_URL = "data source=127.0.0.01;database=mcore;user id=root;password=password;SslMode=none";
 
         /// <summary>
         /// All players

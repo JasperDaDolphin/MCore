@@ -7,8 +7,8 @@
     <ProjectGuid>{E9FBFD1D-FFD8-47DB-9F32-FA3208435636}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>M.Server</RootNamespace>
-    <AssemblyName>M.Server.net</AssemblyName>
+    <RootNamespace>MCore.Server</RootNamespace>
+    <AssemblyName>MCore.Server.net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
