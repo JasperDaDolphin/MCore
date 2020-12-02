@@ -7,15 +7,13 @@ using CitizenFX.Core;
 
 namespace MCore.Server.Entity.Memory
 {
-
     /// <summary>
     /// A memory implementation of MPlayers
     /// </summary>
     public abstract class MemoryMPlayers : MPlayers
     {
-
         // A dictionary (unique id -> player) of all loaded players
-        protected IDictionary<string, MPlayer> Players = new Dictionary<string, MPlayer>();
+        protected IDictionary<string, MPlayer> MPlayers = new Dictionary<string, MPlayer>();
 
         /// <inheritdoc />
         public override void Clean()
@@ -24,13 +22,18 @@ namespace MCore.Server.Entity.Memory
         }
 
         /// <inheritdoc />
-        public override ICollection<MPlayer> GetAllPlayers()
+        public override ICollection<MPlayer> GetAllMPlayers()
         {
-            return Players.Values;
+            return MPlayers.Values;
+        }
+
+        public override IDictionary<string, MPlayer> GetAllMPlayersDictionary()
+        {
+            return MPlayers;
         }
 
         /// <inheritdoc />
-        public override ICollection<MPlayer> GetOnlinePlayers()
+        public override ICollection<MPlayer> GetOnlineMPlayers()
         {
             // Pre-define a collection we will add to
             ICollection<MPlayer> col = new List<MPlayer>();
@@ -43,13 +46,22 @@ namespace MCore.Server.Entity.Memory
             return col;
         }
 
+        public override int MPlayerCount()
+        {
+            return GetAllMPlayers().Count();
+        }
+
+        public override int MPlayerOnlineCount()
+        {
+            return GetOnlineMPlayers().Count();
+        }
+
         /// <inheritdoc />
         public override MPlayer GetById(string id)
         {
             // Try and get the player from the dictionary
-            if (Players.TryGetValue(id, out MPlayer player)) return player;
-
-            return this.GeneratePlayer(id);
+            if (MPlayers.TryGetValue(id, out MPlayer player)) return player;
+            return null;
         }
 
         /// <inheritdoc />
@@ -59,7 +71,7 @@ namespace MCore.Server.Entity.Memory
         }
 
         /// <inheritdoc />
-        public override MPlayer GetByNetworkId(int id)
+        public override MPlayer GetByNetId(int id)
         {
             Player player = new PlayerList()[id];
             if (player != null) return this.GetByPlayer(player);
@@ -77,12 +89,5 @@ namespace MCore.Server.Entity.Memory
         {
             return this.GetBySteamId(player.Identifiers[IdentifierType.STEAM]);
         }
-
-        /// <summary>
-        /// Generates a MPlayer
-        /// </summary>
-        /// <param name="id">Player's unique id</param>
-        /// <returns>Generated player</returns>
-        public abstract MPlayer GeneratePlayer(string id);
     }
 }

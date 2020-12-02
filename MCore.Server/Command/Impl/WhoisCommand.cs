@@ -23,10 +23,10 @@ namespace MCore.Server.Command.Impl {
 
             ICommandSender sender = context.Sender;
 
-            int networkId;
+            int netId;
             try 
             { 
-                networkId = context.ShiftInt();
+                netId = context.ShiftInt();
             } 
             catch
             {
@@ -34,17 +34,18 @@ namespace MCore.Server.Command.Impl {
                 return;
             }
 
-            if (networkId == 0) return;
-            
+            if (netId == 0) return;
+           
             // Shift player
-            MPlayer target = MCoreServer.Instance.GetPlayerByNetworkId(networkId);
+            MPlayer target = MCoreServer.Instance.GetMPlayerBynetId(netId);
 
             if (target != null)
             {
                 // Notify sender of information
                 sender.SendMessage(ChatColor.LIGHT_RED + "Checking: " + ChatColor.LIGHT_GREEN + target.Name + ChatColor.LIGHT_RED + ", their identifiers are:");
-                sender.SendMessage(ChatColor.LIGHT_RED + "- network: " + ChatColor.LIGHT_GREEN + Convert.ToString(target.NetworkId));
-                sender.SendMessage(ChatColor.LIGHT_RED + "- steam: " + ChatColor.LIGHT_GREEN + target.Id);
+                sender.SendMessage(ChatColor.LIGHT_RED + "- network: " + ChatColor.LIGHT_GREEN + Convert.ToString(target.netId));
+                sender.SendMessage(ChatColor.LIGHT_RED + "- PlayerId: " + ChatColor.LIGHT_GREEN + target.Id);
+                sender.SendMessage(ChatColor.LIGHT_RED + "- steamId: " + ChatColor.LIGHT_GREEN + target.MUser.SteamId);
                 sender.SendMessage(ChatColor.LIGHT_RED + "and more information:");
             }
             else

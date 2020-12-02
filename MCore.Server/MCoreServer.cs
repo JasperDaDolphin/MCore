@@ -7,6 +7,7 @@ using MCore.Server.Command;
 using MCore.Server.Storage;
 using MCore.Server.Services;
 using MCore.Base.Services;
+using MCore.Server.Entity.Memory;
 /// <summary>
 /// Base namespace
 /// </summary>
@@ -16,7 +17,7 @@ namespace MCore.Server
     /// <summary>
     /// Main class for the server-side of core
     /// </summary>
-    public class MCoreServer : BaseScript {
+    public partial class MCoreServer : BaseScript {
 
         private bool firstTick = false;
 
@@ -33,7 +34,7 @@ namespace MCore.Server
         /// <summary>
         /// A list of all online players
         /// </summary>
-        public PlayerList OnlinePlayers => base.Players;
+        public PlayerList OnlinePlayers => base. Players;
 
         /// <summary>
         /// A dictionary of all event handlers
@@ -44,8 +45,6 @@ namespace MCore.Server
         /// Registry for server's services
         /// </summary>
         public readonly ServiceRegistry Services = new ServiceRegistry();
-
-        public int TickCounter = 0;
 
         /// <summary>
         /// Script load
@@ -60,7 +59,7 @@ namespace MCore.Server
             Db.Database.CreateIfNotExists();
 
             // Load players
-            MPlayers.Instance.Load();
+            MemoryEntity.Instance.Load();
 
             // Register services
             Services.Add(new CommandService());
@@ -87,25 +86,9 @@ namespace MCore.Server
                 this.firstTick = true;
             }
 
-            //if (this.TickCounter % 10 == 0) UpdatePlayersHandle();
-            //TickCounter++;
-
             // Guarantee async
             await Delay(100);
         }
-
-        private void UpdatePlayersHandle()
-        {
-            foreach (Player player in OnlinePlayers)
-            {
-                MPlayer mPlayer = this.GetPlayer(player);
-                if (int.TryParse(player.Handle, out int networkId))
-                {
-                    mPlayer.NetworkId = networkId;
-                }
-            }
-        }
-
 
         /// <summary>
         /// Broadcasts a message to all online players
@@ -116,50 +99,6 @@ namespace MCore.Server
         public void BroadcastMessage(int[] color, string prefix, string message) {
             // -1 triggers event for all connected clients
             TriggerClientEvent("chatMessage", prefix, color, new string[] { message });
-        }
-
-        /// <summary>
-        /// Gets a player from a citizen
-        /// </summary>
-        /// <param name="player">Citizen of player</param>
-        /// <returns>Player or null if not found</returns>
-        public MPlayer GetPlayer(Player player) {
-            return MPlayers.Instance.GetByPlayer(player);
-        }
-
-        /// <summary>
-        /// Gets a player by their steamId
-        /// </summary>
-        /// <param name="id">Id of player</param>
-        /// <returns>Player or null if not found</returns>
-        public MPlayer GetPlayerBySteamId(string steamId) {
-            return MPlayers.Instance.GetBySteamId(steamId);
-        }
-
-        /// <summary>
-        /// Gets a player by their network id
-        /// </summary>
-        /// <param name="netId">Network id</param>
-        /// <returns>Player or null if not found</returns>
-        public MPlayer GetPlayerByNetworkId(int netId) {
-            return MPlayers.Instance.GetByNetworkId(netId);
-        }
-
-        /// <summary>
-        /// Gets a player by their name
-        /// </summary>
-        /// <param name="name">Name of player</param>
-        /// <returns>Player or null if not found</returns>
-        public MPlayer GetPlayerByName(string name) {
-            return MPlayers.Instance.GetByName(name);
-        }
-
-        /// <summary>
-        /// Gets a collection of online players
-        /// </summary>
-        /// <returns></returns>
-        public ICollection<MPlayer> GetOnlinePlayers() {
-            return MPlayers.Instance.GetOnlinePlayers();
         }
 
         /// <summary>
@@ -175,6 +114,5 @@ namespace MCore.Server
         /// </summary>
         /// <param name="message">Message to log</param>
         public static void Log(string message) => Debug.Write($"{DateTime.Now:s} {message}{Environment.NewLine}");
-
     }
 }

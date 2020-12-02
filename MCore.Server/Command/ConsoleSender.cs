@@ -22,7 +22,7 @@ namespace MCore.Server.Command {
         /// Gets the network id of console, always the same
         /// </summary>
         /// <returns>Always 0</returns>
-        public int NetworkId => 0;
+        public int netId => 0;
 
         /// <summary>
         /// Gets the name of console, always the same

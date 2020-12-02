@@ -46,7 +46,6 @@ namespace MCore.Client {
 
         private bool playerConnected()
         {
-            Debug.WriteLine(this.LocalPlayer.Handle.ToString());
             return API.NetworkIsPlayerConnected(this.LocalPlayer.Handle);
         }
 

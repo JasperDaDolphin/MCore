@@ -23,8 +23,11 @@ namespace MCore.Server.Command.Impl {
 
             // Throws error because of #GetCitizenPlayer() being called and no network id being available
 
-            Task task = MPlayers.Instance.ForceSaveAsync();
-            task.ContinueWith(t => sender.SendMessage(ChatColor.LIGHT_GREEN + "Done saving."));
+            Task playerTask = MPlayers.Instance.ForceSaveAsync();
+            playerTask.ContinueWith(t => sender.SendMessage(ChatColor.LIGHT_GREEN + "Done saving."));
+
+            Task userTask = MUsers.Instance.ForceSaveAsync();
+            userTask.ContinueWith(t => sender.SendMessage(ChatColor.LIGHT_GREEN + "Done saving."));
         }
     }
 }

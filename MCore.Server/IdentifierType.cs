@@ -16,5 +16,6 @@ namespace MCore.Server {
         public const string NAME = "name";
         public const string IP = "ip";
         public const string LICENSE = "license";
+        public const string DISCORD = "discord";
     }
 }

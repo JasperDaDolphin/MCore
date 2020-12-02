@@ -8,23 +8,21 @@ using System.Threading.Tasks;
 
 namespace MCore.Server.Entity.Memory.MySql
 {
-
     /// <summary>
-    /// A MySQL memory implementation of MPlayers
+    /// A MySQL memory implementation of MUsers
     /// </summary>
-    public class MySqlMPlayers : MemoryMPlayers
+    public class MySqlMUsers : MemoryMUsers
     {
-
         /// <summary>
-        /// Force saves players to a MySQL database sync
+        /// Force saves users to a MySQL database sync
         /// </summary>
         public override void ForceSave()
         {
-            this.ForceSaveAsync().RunSynchronously();
+            this.ForceSaveAsync().Wait();
         }
 
         /// <summary>
-        /// Force saves players to a MySQL database async
+        /// Force saves users to a MySQL database async
         /// </summary>
         /// <returns>Task responsible</returns>
         public override async Task ForceSaveAsync()
@@ -34,52 +32,56 @@ namespace MCore.Server.Entity.Memory.MySql
             DbContextTransaction transaction = database.BeginTransaction();
             try
             {
+                Debug.WriteLine(base.MUsers.Count.ToString());
                 // Add users and save changes
-                MCoreServer.Db.MPlayers.AddRange(base.MPlayers.Values);
+                MCoreServer.Db.MUsers.AddRange(base.MUsers.Values);
                 await MCoreServer.Db.SaveChangesAsync();
 
                 transaction.Commit();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Debug.WriteLine(e.ToString());
                 // Oops, something went wrong, rollback to previous version
                 transaction.Rollback();
             }
-        }        
+        }
 
         /// <summary>
-        /// Loads players from a MySQL database
+        /// Loads users from a MySQL database
         /// </summary>
         public override void Load()
         {
             // Grab users with same steamid
-            List<MPlayer> players = MCoreServer.Db.MPlayers.ToList();
+            List<MUser> users = MCoreServer.Db.MUsers.ToList();
 
-            // Clear players and start adding them
-            base.MPlayers.Clear();
-            foreach (MPlayer player in players)
+            // Clear users and start adding them
+            base.MUsers.Clear();
+            foreach (MUser user in users)
             {
-                base.MPlayers.Add(player.Id, player);
+                base.MUsers.Add(user.Id, user);
             }
         }
 
         /// <inheritdoc />
-        public override MPlayer GenerateMPlayer(MUser mUser)
+        public override MUser GenerateMUser(Player player)
         {
-            MPlayer mPlayer = new MPlayer(mUser);
-            base.MPlayers.Add(mPlayer.Id, mPlayer);
-            return mPlayer;
+            Debug.WriteLine(player.Name);
+            MUser mUser = new MUser(player);
+            base.MUsers.Add(mUser.Id, mUser);
+            MPlayer mPlayer = MCoreServer.Instance.GenerateMPlayer(mUser);
+            return mUser;
         }
 
         /// <summary>
-        /// Gets or creates a player from steamid
+        /// Gets or creates a user from Id
         /// </summary>
-        /// <param name="steamId">SteamId of player</param>
-        /// <returns>A new or retrieved player</returns>
-        public static async Task<MPlayer> GetOrCreate(string userId)
+        /// <param name="Id">Id of user</param>
+        /// <returns>A new or retrieved user</returns>
+        public static async Task<MUser> GetOrCreate(string Id)
         {
             // Pre-define a user
-            MPlayer mUser = null;
+            MUser user = null;
 
             // Get database and start a transaction
             Database database = MCoreServer.Db.Database;
@@ -89,22 +91,22 @@ namespace MCore.Server.Entity.Memory.MySql
             try
             {
                 // Grab users with same steamid
-                List<MPlayer> mUsers = MCoreServer.Db.MPlayers.Where(u => u.MUser.Id == userId).ToList();
+                List<MUser> users = MCoreServer.Db.MUsers.Where(u => u.Id == Id).ToList();
 
                 // If no user is found, create them
-                if (!mUsers.Any())
+                if (!users.Any() || Id == null)
                 {
                     // Create user
-                    mUser = new MPlayer();
+                    user = new MUser(Id);
 
                     // Add user and save changes
-                    MCoreServer.Db.MPlayers.Add(mUser);
+                    MCoreServer.Db.MUsers.Add(user);
                     await MCoreServer.Db.SaveChangesAsync();
                 }
                 else
                 {
                     // User found, use them instead
-                    mUser = mUsers.First();
+                    user = users.First();
                 }
 
                 // Commit to transaction
@@ -118,7 +120,7 @@ namespace MCore.Server.Entity.Memory.MySql
             }
 
             // Finally, return out user
-            return mUser;
+            return user;
         }
     }
 }

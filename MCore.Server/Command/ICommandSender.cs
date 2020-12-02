@@ -15,7 +15,7 @@ namespace MCore.Server.Command {
         /// Gets the network identifier
         /// </summary>
         /// <returns>The network identifier</returns>
-        int NetworkId { get; }
+        int netId { get; }
 
         /// <summary>
         /// Gets the name

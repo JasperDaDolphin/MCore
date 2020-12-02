@@ -24,7 +24,7 @@ namespace MCore.Server.Services {
         /// Constructs a command service
         /// </summary>
         public CommandService() {
-            Rpc.Client.Event(ServerEvents.chatMessage);
+            //Rpc.Client.Event(ServerEvents.chatMessage);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace MCore.Server.Services {
             ICommandSender sender;
             if (source > 0)
             {
-                sender = MCoreServer.Instance.GetPlayerByNetworkId(source);
+                sender = MCoreServer.Instance.GetMPlayerBynetId(source);
             } 
             else
             {

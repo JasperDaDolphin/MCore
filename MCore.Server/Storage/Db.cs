@@ -6,7 +6,7 @@ using System.Data.Entity.Migrations;
 using System.Linq;
 using CitizenFX.Core;
 using MCore.Server.Entity;
-using MySql.Data.Entity;
+using MySql.Data.EntityFramework;
 
 namespace MCore.Server.Storage {
 
@@ -24,14 +24,19 @@ namespace MCore.Server.Storage {
         /// <summary>
         /// All players
         /// </summary>
-        public DbSet<MPlayer> Players { get; set; }
+        public DbSet<MPlayer> MPlayers { get; set; }
+
+        /// <summary>
+        /// All Users
+        /// </summary>
+        public DbSet<MUser> MUsers { get; set; }
 
         /// <summary>
         /// All Users
         /// </summary>
         //public DbSet<MUsers> Users { get; set; }
 
-    public DB() : base(CONNECTION_URL) {
+        public DB() : base(CONNECTION_URL) {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<DB, Configuration>());
         }
 

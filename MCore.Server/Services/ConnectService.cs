@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using MCore.Base.Rpc;
 using MCore.Server.Entity;
+using MCore.Server.Entity.Memory;
 using MCore.Server.Rpc;
 using System;
 using System.Collections.Generic;
@@ -35,10 +36,11 @@ namespace MCore.Server.Services {
         {
             try
             {
-                MPlayer mPlayer = MCoreServer.Instance.GetPlayer(player);
-                if (int.TryParse(player.Handle, out int networkId))
+                MUser mUser = MCoreServer.Instance.GetMUserByPlayer(player);
+                MemoryEntity.Instance.ForceSave();
+                if (int.TryParse(player.Handle, out int netId))
                 {
-                    mPlayer.NetworkId = networkId;
+                    mUser.netId = netId;
                 }
             }
             catch (Exception e)
